@@ -1,0 +1,18 @@
+/* Plain reading page for the legal documents. */
+:root{ --bg:#eceff3; --surface:#ffffff; --ink:#16202b; --muted:#566473; --line:#d3dae1; --warn:#9a4d00; --warn-soft:#fbeedd; color-scheme:light; }
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0f151b; --surface:#17202a; --ink:#e4eaf0; --muted:#97a6b4; --line:#2b3844; --warn:#f0a75a; --warn-soft:#38270f; color-scheme:dark; }
+}
+*{box-sizing:border-box}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size:16px; line-height:1.65}
+main{max-width:720px; margin:0 auto; padding:28px max(16px, env(safe-area-inset-right, 0px)) 80px max(16px, env(safe-area-inset-left, 0px)); display:grid; gap:12px}
+h1{font-size:1.7rem; line-height:1.2; margin:8px 0 0}
+h2{font-size:1.08rem; margin:14px 0 0}
+p, ul{margin:0}
+ul{padding-left:1.3em; display:grid; gap:6px}
+a{color:inherit}
+.meta{color:var(--muted); font-size:.9rem}
+.draft{background:var(--warn-soft); color:var(--warn); border-radius:8px; padding:10px 14px; font-size:.9rem; font-weight:600}
+table{border-collapse:collapse; width:100%; font-size:.92rem; background:var(--surface); border:1px solid var(--line); border-radius:8px}
+th, td{text-align:left; vertical-align:top; padding:8px 10px; border-bottom:1px solid var(--line)}
+th{color:var(--muted); font-weight:600; font-size:.82rem}
