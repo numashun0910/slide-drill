@@ -326,6 +326,9 @@ const T = [
   ['🎟️ 招待コードを受け取りました。ログインすると Pro を無料で使えます。', '🎟️ Invite code received. Sign in to use Pro for free.', '🎟️ Kod jemputan diterima. Log masuk untuk guna Pro secara percuma.', '🎟️ 已收到邀请码。登录后即可免费使用 Pro。'],
   ['🎟️ 招待コードで Pro になりました。', '🎟️ Your invite code turned on Pro.', '🎟️ Kod jemputan anda telah mengaktifkan Pro.', '🎟️ 邀请码已为你开通 Pro。'],
   ['招待コードが正しくありませんでした。', 'The invite code was not valid.', 'Kod jemputan tidak sah.', '邀请码无效。'],
+  ['招待コード', 'Invite code', 'Kod jemputan', '邀请码'],
+  ['招待コードを使う', 'Use invite code', 'Guna kod jemputan', '使用邀请码'],
+  ['うまくいきませんでした。もう一度試してください。', 'That did not work. Please try again.', 'Tidak berjaya. Sila cuba lagi.', '没有成功，请再试一次。'],
   ['残り 約 {n} 分', 'About {n} min left', 'Kira-kira {n} minit lagi', '大约还需 {n} 分钟'],
   ['資料が多いと数分かかります。中止しても、それまでにできた問題は保存されます。', 'Large materials take a few minutes. If you stop, the questions made so far are kept.', 'Bahan yang banyak mengambil masa beberapa minit. Jika anda berhenti, soalan yang telah dibuat tetap disimpan.', '资料较多时需要几分钟。即使中止，已生成的题目也会保留。'],
 ];

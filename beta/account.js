@@ -31,7 +31,7 @@ async function readProfile() {
   return data;
 }
 
-async function redeem(code) {
+export async function redeem(code) {
   const res = await fetch(`${BILLING_BASE}/redeem`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${await accessToken()}`, 'Content-Type': 'application/json' },
@@ -47,8 +47,10 @@ async function load(session, onChange) {
   account.plan = 'free';
   if (account.user) {
     let data = await readProfile();
-    if (pendingInvite() && !(data && data.stripe_subscription_id)) {
-      await redeem(pendingInvite()).catch(() => {});
+    const metaInvite = (session.user.user_metadata || {}).invite || '';
+    const code = pendingInvite() || (data && data.plan !== 'pro' ? metaInvite : '');
+    if (code && !(data && data.stripe_subscription_id)) {
+      await redeem(code).catch(() => {});
       data = await readProfile();
     }
     if (data && data.plan === 'pro' && (!data.pro_until || new Date(data.pro_until) > new Date())) account.plan = 'pro';
@@ -73,7 +75,7 @@ export async function initAccount(onChange) {
 
 export async function signIn(email) {
   if (!sb) throw new Error('offline');
-  const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + location.pathname } });
+  const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: location.origin + location.pathname, ...(pendingInvite() ? { data: { invite: pendingInvite() } } : {}) } });
   if (error) throw error;
 }
 

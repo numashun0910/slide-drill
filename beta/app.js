@@ -2,7 +2,7 @@ import { decks, loadSettings, saveSettings, clearSettings } from './db.js';
 import { MODELS, DENSITY, TR_LANGS, generate, testKey, manualPrompt, parseManualReply, costOf } from './generate.js';
 import { currentLang } from './i18n.js';
 import { PRICE, FREE_LIMITS, PRO_LIMITS, API_BASE, SERVER_MODEL, account, planOf, limitsOf, usesOwnKey, checkoutReady } from './service.js';
-import { initAccount, signIn, signOut, accessToken, usedToday, openBilling, pendingInvite } from './account.js';
+import { initAccount, signIn, signOut, accessToken, usedToday, openBilling, pendingInvite, redeem } from './account.js';
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -613,7 +613,9 @@ async function renderAccount() {
       ${account.inviteResult === 'ok' ? '<p>🎟️ 招待コードで Pro になりました。</p>' : account.inviteResult === 'bad' ? '<p class="hint">招待コードが正しくありませんでした。</p>' : ''}
       ${pro && account.invited ? `<p class="hint">招待による Pro です（${esc(new Date(account.proUntil).toLocaleDateString('ja-JP'))} まで）。使ってみた感想をぜひ教えてください。</p>`
         : pro ? `<p class="hint">カードの変更や解約は、下のボタンから Stripe の画面で行えます。解約しても、支払い済みの期間が終わるまで Pro を使えます。</p><div class="row-btns"><button type="button" class="btn ghost" data-act="billing" data-route="portal">支払いと解約の管理</button></div>`
-        : `<p class="hint" id="used-today"></p><div class="row-btns"><a class="btn" href="#/plan">プランを見る</a></div>`}
+        : `<p class="hint" id="used-today"></p><div class="row-btns"><a class="btn" href="#/plan">プランを見る</a></div>
+          <label class="field"><span>招待コード</span><input id="invite-code" type="text" autocomplete="off" spellcheck="false" placeholder="MCQ-XXXXXX"></label>
+          <div class="row-btns"><button type="button" class="btn ghost" data-act="redeem">招待コードを使う</button></div>`}
     </section>
     <section class="panel">
       <div class="row-btns"><button type="button" class="btn ghost" data-act="sign-out">ログアウト</button></div>
@@ -991,6 +993,17 @@ document.addEventListener('click', async e => {
         st.textContent = 'メールを送れませんでした。少し待ってから、もう一度試してください。'; st.className = 'status bad-t';
         el.disabled = false;
       }
+      break;
+    }
+    case 'redeem': {
+      const code = ($('#invite-code').value || '').trim();
+      if (!code) break;
+      el.disabled = true;
+      await redeem(code).catch(() => {});
+      if (account.inviteResult === 'ok') { location.reload(); break; }
+      toast(account.inviteResult === 'bad' ? '招待コードが正しくありませんでした。' : 'うまくいきませんでした。もう一度試してください。');
+      account.inviteResult = '';
+      el.disabled = false;
       break;
     }
     case 'checkout':
